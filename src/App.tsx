@@ -1,9 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import './App.css';
 
-const NUM_ROWS = 30;
-const NUM_COLS = 50;
-const SIMULATION_SPEED_MS = 100;
+const NUM_ROWS = 50;
+const NUM_COLS = 100;
 
 const operations = [
   [0, 1], [0, -1], [1, -1], [-1, 1],
@@ -58,9 +57,11 @@ function App() {
   const [running, setRunning] = useState(false);
   const [generation, setGeneration] = useState(0);
   const [populationHistory, setPopulationHistory] = useState<number[]>([]);
+  const [speed, setSpeed] = useState(100);
 
   const runningRef = useRef(running);
   runningRef.current = running;
+  const speedRef = useRef(speed);
 
   const runSimulation = useCallback(() => {
     if (!runningRef.current) {
@@ -104,7 +105,7 @@ function App() {
     });
 
     setGeneration((gen) => gen + 1);
-    setTimeout(runSimulation, SIMULATION_SPEED_MS);
+    setTimeout(runSimulation, speedRef.current);
   }, []);
 
   useEffect(() => {
@@ -180,6 +181,25 @@ function App() {
           </button>
           <button onClick={handleRandom}>Randomize Chaos</button>
           <button onClick={handleClear}>Clear the Void</button>
+          <div className="speed-control" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label htmlFor="speed-select" style={{ color: '#fff', fontSize: '0.9rem' }}>Speed:</label>
+            <select 
+              id="speed-select"
+              value={speed} 
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setSpeed(val);
+                speedRef.current = val;
+              }}
+              style={{ padding: '0.3rem', borderRadius: '4px', backgroundColor: '#333', color: '#fff', border: '1px solid #555' }}
+            >
+              <option value={500}>Sluggish (500ms)</option>
+              <option value={200}>Slow (200ms)</option>
+              <option value={100}>Normal (100ms)</option>
+              <option value={50}>Fast (50ms)</option>
+              <option value={16}>Ludicrous (16ms)</option>
+            </select>
+          </div>
         </div>
         
         <div className="stats">
@@ -191,9 +211,10 @@ function App() {
         className="grid-container"
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${NUM_COLS}, 20px)`,
+          gridTemplateColumns: `repeat(${NUM_COLS}, 10px)`,
           gap: '1px',
-          backgroundColor: '#333'
+          backgroundColor: '#333',
+          justifyContent: 'center'
         }}
       >
         {grid.map((row, i) =>
@@ -205,8 +226,8 @@ function App() {
                 onClick={() => toggleCell(i, k)}
                 className="cell"
                 style={{
-                  width: 20,
-                  height: 20,
+                  width: 10,
+                  height: 10,
                   backgroundColor: getCellColor(cell.alive, cell.age),
                   cursor: 'pointer',
                   transition: 'background-color 0.2s ease'
