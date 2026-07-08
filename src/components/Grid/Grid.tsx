@@ -13,7 +13,7 @@ export const Grid = ({ grid, onToggleCell }: GridProps) => {
     <div 
       className="grid-container"
       style={{
-        gridTemplateColumns: `repeat(${NUM_COLS}, 10px)`
+        gridTemplateColumns: `repeat(${NUM_COLS}, 1fr)`
       }}
     >
       {grid.map((row, i) =>

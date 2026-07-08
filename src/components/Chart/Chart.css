@@ -3,8 +3,7 @@
   max-width: 800px;
   background-color: #1a1a1a;
   border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #333;
+  padding: 1rem;
 }
 
 .chart-header {
@@ -53,7 +52,7 @@
 .svg-wrapper {
   position: relative;
   width: 100%;
-  height: 150px;
+  height: 100px;
   background-color: #111;
   border-radius: 8px;
   overflow: hidden;
