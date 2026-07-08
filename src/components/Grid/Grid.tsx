@@ -21,7 +21,9 @@ export const Grid = ({ grid, onToggleCell }: GridProps) => {
           <Cell 
             key={`${i}-${k}`} 
             cell={cell} 
-            onClick={() => onToggleCell(i, k)} 
+            rowIndex={i}
+            colIndex={k}
+            onToggleCell={onToggleCell} 
           />
         ))
       )}

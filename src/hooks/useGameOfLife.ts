@@ -21,28 +21,42 @@ export const useGameOfLife = () => {
     }
 
     setGrid((g) => {
-      const nextGrid = g.map(row => row.map(cell => ({ ...cell })));
+      const nextGrid = g.map(row => [...row]);
       let currentPopulation = 0;
 
       for (let i = 0; i < NUM_ROWS; i++) {
         for (let k = 0; k < NUM_COLS; k++) {
+          const cell = g[i][k];
           const neighbors = countNeighbors(g, i, k);
           
-          if (g[i][k].alive && (neighbors < 2 || neighbors > 3)) {
-            nextGrid[i][k].alive = false;
-            nextGrid[i][k].age = 0;
-          } else if (!g[i][k].alive && neighbors === 3) {
-            nextGrid[i][k].alive = true;
-            nextGrid[i][k].age = 1;
-          } else if (g[i][k].alive) {
-            nextGrid[i][k].age += 1;
+          let nextAlive = cell.alive;
+          let nextAge = cell.age;
+          
+          if (cell.alive && (neighbors < 2 || neighbors > 3)) {
+            nextAlive = false;
+            nextAge = 0;
+          } else if (!cell.alive && neighbors === 3) {
+            nextAlive = true;
+            nextAge = 1;
+          } else if (cell.alive) {
+            nextAge += 1;
+          }
+
+          if (nextAlive !== cell.alive || nextAge !== cell.age) {
+            nextGrid[i][k] = { ...cell, alive: nextAlive, age: nextAge };
           }
         }
       }
       
       for (let i = 0; i < NUM_ROWS; i++) {
         for (let k = 0; k < NUM_COLS; k++) {
-           nextGrid[i][k].neighbors = countNeighbors(nextGrid, i, k);
+           const newNeighbors = countNeighbors(nextGrid, i, k);
+           const cell = nextGrid[i][k];
+           
+           if (cell.neighbors !== newNeighbors) {
+             nextGrid[i][k] = { ...cell, neighbors: newNeighbors };
+           }
+           
            if (nextGrid[i][k].alive) currentPopulation++;
         }
       }
@@ -66,25 +80,29 @@ export const useGameOfLife = () => {
     }
   }, [running, runSimulation]);
 
-  const toggleCell = (i: number, k: number) => {
-    const newGrid = [...grid];
-    newGrid[i] = [...newGrid[i]];
-    const wasAlive = newGrid[i][k].alive;
-    newGrid[i][k] = { 
-      ...newGrid[i][k], 
-      alive: !wasAlive,
-      age: !wasAlive ? 1 : 0 
-    };
-    
-    // Update neighbors for accurate tooltips (naive approach for single click)
-    for (let r = 0; r < NUM_ROWS; r++) {
-      for (let c = 0; c < NUM_COLS; c++) {
-        newGrid[r][c].neighbors = countNeighbors(newGrid, r, c);
+  const toggleCell = useCallback((i: number, k: number) => {
+    setGrid((g) => {
+      const newGrid = g.map(row => [...row]);
+      const wasAlive = newGrid[i][k].alive;
+      newGrid[i][k] = { 
+        ...newGrid[i][k], 
+        alive: !wasAlive,
+        age: !wasAlive ? 1 : 0 
+      };
+      
+      for (let r = 0; r < NUM_ROWS; r++) {
+        for (let c = 0; c < NUM_COLS; c++) {
+          const newNeighbors = countNeighbors(newGrid, r, c);
+          const cell = newGrid[r][c];
+          if (cell.neighbors !== newNeighbors) {
+            newGrid[r][c] = { ...cell, neighbors: newNeighbors };
+          }
+        }
       }
-    }
-    
-    setGrid(newGrid);
-  };
+      
+      return newGrid;
+    });
+  }, []);
 
   const handleStartStop = () => {
     setRunning(!running);
