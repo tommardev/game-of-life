@@ -1,0 +1,26 @@
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.speed-control label {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.speed-control select {
+  padding: 0.3rem;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  cursor: pointer;
+}
