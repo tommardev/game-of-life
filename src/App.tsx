@@ -21,20 +21,22 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header generation={generation} />
-      
-      <Controls 
-        running={running}
-        speed={speed}
-        onStartStop={handleStartStop}
-        onRandom={handleRandom}
-        onClear={handleClear}
-        onSpeedChange={setSpeed}
-      />
+      <div className="sidebar">
+        <Header generation={generation} />
+        <Controls 
+          running={running}
+          speed={speed}
+          onStartStop={handleStartStop}
+          onRandom={handleRandom}
+          onClear={handleClear}
+          onSpeedChange={setSpeed}
+        />
+        <Chart populationHistory={populationHistory} />
+      </div>
 
-      <Grid grid={grid} onToggleCell={toggleCell} />
-
-      <Chart populationHistory={populationHistory} />
+      <div className="main-content">
+        <Grid grid={grid} onToggleCell={toggleCell} />
+      </div>
     </div>
   );
 }

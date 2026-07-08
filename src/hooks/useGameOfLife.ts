@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { CellState } from '../types';
-import { NUM_ROWS, NUM_COLS } from '../constants';
+import { NUM_ROWS, NUM_COLS, operations } from '../constants';
 import { generateEmptyGrid, generateRandomGrid, countNeighbors } from '../utils/gameUtils';
 
 export const useGameOfLife = () => {
@@ -42,22 +42,13 @@ export const useGameOfLife = () => {
             nextAge += 1;
           }
 
-          if (nextAlive !== cell.alive || nextAge !== cell.age) {
-            nextGrid[i][k] = { ...cell, alive: nextAlive, age: nextAge };
+          if (nextAlive !== cell.alive || nextAge !== cell.age || neighbors !== cell.neighbors) {
+            nextGrid[i][k] = { ...cell, alive: nextAlive, age: nextAge, neighbors };
           }
-        }
-      }
-      
-      for (let i = 0; i < NUM_ROWS; i++) {
-        for (let k = 0; k < NUM_COLS; k++) {
-           const newNeighbors = countNeighbors(nextGrid, i, k);
-           const cell = nextGrid[i][k];
-           
-           if (cell.neighbors !== newNeighbors) {
-             nextGrid[i][k] = { ...cell, neighbors: newNeighbors };
-           }
-           
-           if (nextGrid[i][k].alive) currentPopulation++;
+          
+          if (nextAlive) {
+            currentPopulation++;
+          }
         }
       }
 
@@ -90,15 +81,20 @@ export const useGameOfLife = () => {
         age: !wasAlive ? 1 : 0 
       };
       
-      for (let r = 0; r < NUM_ROWS; r++) {
-        for (let c = 0; c < NUM_COLS; c++) {
-          const newNeighbors = countNeighbors(newGrid, r, c);
-          const cell = newGrid[r][c];
-          if (cell.neighbors !== newNeighbors) {
-            newGrid[r][c] = { ...cell, neighbors: newNeighbors };
-          }
+      // Update neighbors for this cell
+      newGrid[i][k].neighbors = countNeighbors(newGrid, i, k);
+
+      // Update neighbors for 8 adjacent cells
+      operations.forEach(([x, y]) => {
+        const newI = i + x;
+        const newK = k + y;
+        if (newI >= 0 && newI < NUM_ROWS && newK >= 0 && newK < NUM_COLS) {
+          newGrid[newI][newK] = {
+            ...newGrid[newI][newK],
+            neighbors: countNeighbors(newGrid, newI, newK)
+          };
         }
-      }
+      });
       
       return newGrid;
     });

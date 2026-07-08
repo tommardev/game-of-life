@@ -1,25 +1,93 @@
 .chart-container {
-  margin-top: 2rem;
   width: 100%;
-  max-width: 1000px;
-}
-
-.chart-container h3 {
-  text-align: center;
-  color: #ffaa00;
-}
-
-.chart-container svg {
-  width: 100%;
-  height: 100px;
-  background-color: #222;
+  max-width: 800px;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.5rem;
   border: 1px solid #333;
-  border-radius: 4px;
 }
 
-.chart-container path,
-.chart-container line {
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.chart-header h3 {
+  color: #ffaa00;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.chart-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.stat-value.current {
+  color: #ff0055;
+}
+
+.stat-value.max {
+  color: #fff;
+}
+
+.svg-wrapper {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  background-color: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+.svg-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.chart-line {
   stroke: #ff0055;
   stroke-width: 2;
   fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed #333;
 }
