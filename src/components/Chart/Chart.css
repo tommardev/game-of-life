@@ -3,26 +3,29 @@
   max-width: 800px;
   background-color: #1a1a1a;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.8rem;
   box-sizing: border-box;
+  transition: padding 0.3s ease;
 }
 
 .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .chart-header h3 {
   color: #ffaa00;
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  transition: font-size 0.3s ease;
 }
 
 .chart-stats {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
+  transition: gap 0.3s ease;
 }
 
 .stat {
@@ -32,14 +35,16 @@
 }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #888;
   text-transform: uppercase;
+  transition: font-size 0.3s ease;
 }
 
 .stat-value {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
+  transition: font-size 0.3s ease;
 }
 
 .stat-value.current {
@@ -53,11 +58,12 @@
 .svg-wrapper {
   position: relative;
   width: 100%;
-  height: 100px;
+  height: 80px;
   background-color: #111;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #222;
+  transition: height 0.3s ease;
 }
 
 .svg-wrapper svg {
@@ -90,4 +96,25 @@
   left: 0;
   right: 0;
   border-bottom: 1px dashed #333;
+}
+
+@media (max-width: 900px) {
+  .chart-stats {
+    gap: 0.75rem;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+  }
+  .stat-value {
+    font-size: 0.9rem;
+  }
+  .svg-wrapper {
+    height: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .chart-container {
+    display: none;
+  }
 }

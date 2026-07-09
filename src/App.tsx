@@ -24,6 +24,12 @@ function App() {
   return (
     <div className="app-container">
       <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+        <button
+          className="sidebar-toggle"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          {isSidebarOpen ? '◀' : '▶'}
+        </button>
         <div className="sidebar-content">
           <Header generation={generation} />
           <Controls
@@ -39,12 +45,6 @@ function App() {
       </div>
 
       <div className="main-content">
-        <button
-          className="sidebar-toggle"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
-          {isSidebarOpen ? '◀' : '▶'}
-        </button>
         <Grid grid={grid} onToggleCell={toggleCell} />
       </div>
     </div>

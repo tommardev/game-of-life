@@ -1,3 +1,28 @@
+:root {
+  --sidebar-width: 300px;
+  --sidebar-padding: 1.25rem;
+  --sidebar-gap: 1.25rem;
+  --toggle-top: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 250px;
+    --sidebar-padding: 1rem;
+    --sidebar-gap: 1rem;
+    --toggle-top: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --sidebar-width: 200px;
+    --sidebar-padding: 0.75rem;
+    --sidebar-gap: 0.75rem;
+    --toggle-top: 0.75rem;
+  }
+}
+
 .app-container {
   display: flex;
   flex-direction: row;
@@ -5,31 +30,39 @@
   width: 100vw;
   box-sizing: border-box;
   background-color: #121212;
+  overflow: hidden;
 }
 
 .sidebar {
-  width: 320px;
-  min-width: 320px;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   background-color: #1a1a1a;
   border-right: 1px solid #333;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  transition: margin-left 0.3s ease;
+  transition:
+    margin-left 0.3s ease,
+    width 0.3s ease,
+    min-width 0.3s ease;
   box-sizing: border-box;
+  position: relative;
+  overflow: visible;
 }
 
 .sidebar-content {
-  padding: 1.5rem;
+  padding: var(--sidebar-padding);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 320px;
+  gap: var(--sidebar-gap);
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
 .sidebar.closed {
-  margin-left: -320px;
+  margin-left: calc(-1 * var(--sidebar-width));
 }
 
 .main-content {
@@ -40,26 +73,36 @@
   justify-content: center;
   padding: 2rem;
   overflow-y: auto;
+  overflow-x: hidden;
   gap: 2rem;
   position: relative;
 }
 
 .sidebar-toggle {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: var(--toggle-top);
   z-index: 100;
   background-color: #222;
   border: 1px solid #444;
   color: #fff;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 8px;
   cursor: pointer;
   width: auto;
   transition:
+    right 0.3s ease,
+    top 0.3s ease,
     background-color 0.2s,
     border-color 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar.open .sidebar-toggle {
+  right: var(--sidebar-padding);
+}
+
+.sidebar.closed .sidebar-toggle {
+  right: -38px;
 }
 
 .sidebar-toggle:hover {

@@ -1,36 +1,76 @@
 .header {
   text-align: left;
+  padding-right: 2.5rem;
 }
 
 .header h1 {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   margin-top: 0;
   line-height: 1.2;
+  transition: font-size 0.3s ease;
 }
 
 .subtitle {
   color: #888;
   font-style: italic;
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
   line-height: 1.4;
+  transition: margin-bottom 0.3s ease;
 }
 
 .stats {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: bold;
   color: #ffaa00;
   background: #222;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 8px;
   border: 1px solid #333;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  transition:
+    padding 0.3s ease,
+    font-size 0.3s ease;
 }
 
 .stats span {
   color: #ff0055;
-  font-size: 2rem;
+  font-size: 1.6rem;
   display: block;
   margin-top: 0.2rem;
+  transition: font-size 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .header h1 {
+    font-size: 1.4rem;
+  }
+  .subtitle {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .stats {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+  .stats span {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 1.2rem;
+  }
+  .subtitle {
+    display: none;
+  }
+  .stats {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+  .stats span {
+    font-size: 1.1rem;
+  }
 }
