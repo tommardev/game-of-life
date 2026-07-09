@@ -4,6 +4,7 @@ import { Header } from './components/Header/Header';
 import { Controls } from './components/Controls/Controls';
 import { Grid } from './components/Grid/Grid';
 import { Chart } from './components/Chart/Chart';
+import { InfoPanel } from './components/InfoPanel/InfoPanel';
 import './App.css';
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
     handleStartStop,
     handleClear,
     handleRandom,
+    lastRunStats,
+    showInfoPanel,
+    setShowInfoPanel,
   } = useGameOfLife();
 
   return (
@@ -47,6 +51,12 @@ function App() {
       <div className="main-content">
         <Grid grid={grid} onSetCellsState={setCellsState} />
       </div>
+
+      <InfoPanel
+        isOpen={showInfoPanel}
+        stats={lastRunStats}
+        onClose={() => setShowInfoPanel(false)}
+      />
     </div>
   );
 }

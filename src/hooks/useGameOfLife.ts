@@ -1,10 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import type { CellState } from '../types';
+import type { CellState, RunStats } from '../types';
 import { NUM_ROWS, NUM_COLS, operations } from '../constants';
 import {
   generateEmptyGrid,
   generateRandomGrid,
   countNeighbors,
+  countAliveCells,
 } from '../utils/gameUtils';
 
 export const useGameOfLife = () => {
@@ -13,6 +14,15 @@ export const useGameOfLife = () => {
   const [generation, setGeneration] = useState(0);
   const [populationHistory, setPopulationHistory] = useState<number[]>([]);
   const [speed, setSpeed] = useState(100);
+  const [lastRunStats, setLastRunStats] = useState<RunStats | null>(null);
+  const [showInfoPanel, setShowInfoPanel] = useState(false);
+
+  const runStatsRef = useRef<{
+    startGeneration: number;
+    startPopulation: number;
+    peakPopulation: number;
+    history: number[];
+  } | null>(null);
 
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -63,6 +73,14 @@ export const useGameOfLife = () => {
             currentPopulation++;
           }
         }
+      }
+
+      if (runStatsRef.current) {
+        runStatsRef.current.peakPopulation = Math.max(
+          runStatsRef.current.peakPopulation,
+          currentPopulation,
+        );
+        runStatsRef.current.history.push(currentPopulation);
       }
 
       setPopulationHistory((prev) => {
@@ -127,22 +145,58 @@ export const useGameOfLife = () => {
     [],
   );
 
-  const handleStartStop = () => {
-    setRunning(!running);
-  };
+  const handleStartStop = useCallback(() => {
+    if (!running) {
+      if (!runStatsRef.current) {
+        const initialPop = countAliveCells(grid);
+        runStatsRef.current = {
+          startGeneration: generation,
+          startPopulation: initialPop,
+          peakPopulation: initialPop,
+          history: [initialPop],
+        };
+      }
+    } else {
+      if (runStatsRef.current) {
+        const finalPop = countAliveCells(grid);
+        const elapsed = generation - runStatsRef.current.startGeneration;
+        if (elapsed >= 1) {
+          const stats: RunStats = {
+            generationsElapsed: elapsed,
+            startPopulation: runStatsRef.current.startPopulation,
+            endPopulation: finalPop,
+            peakPopulation: Math.max(
+              runStatsRef.current.peakPopulation,
+              finalPop,
+            ),
+            populationHistory: [...runStatsRef.current.history, finalPop],
+          };
+          setLastRunStats(stats);
+          setShowInfoPanel(true);
+        }
+      }
+    }
+    setRunning((r) => !r);
+  }, [running, grid, generation]);
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setGrid(generateEmptyGrid());
     setGeneration(0);
     setPopulationHistory([]);
     setRunning(false);
-  };
+    setLastRunStats(null);
+    setShowInfoPanel(false);
+    runStatsRef.current = null;
+  }, []);
 
-  const handleRandom = () => {
+  const handleRandom = useCallback(() => {
     setGrid(generateRandomGrid());
     setGeneration(0);
     setPopulationHistory([]);
-  };
+    setLastRunStats(null);
+    setShowInfoPanel(false);
+    runStatsRef.current = null;
+  }, []);
 
   return {
     grid,
@@ -155,5 +209,8 @@ export const useGameOfLife = () => {
     handleStartStop,
     handleClear,
     handleRandom,
+    lastRunStats,
+    showInfoPanel,
+    setShowInfoPanel,
   };
 };

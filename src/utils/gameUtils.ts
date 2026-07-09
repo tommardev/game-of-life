@@ -74,3 +74,15 @@ export const getTooltipText = (cell: CellState) => {
     return { title: 'Dead', reason: 'Nothing to see here.' };
   }
 };
+
+export const countAliveCells = (g: CellState[][]): number => {
+  let count = 0;
+  for (let i = 0; i < g.length; i++) {
+    for (let k = 0; k < g[i].length; k++) {
+      if (g[i][k].alive) {
+        count++;
+      }
+    }
+  }
+  return count;
+};
