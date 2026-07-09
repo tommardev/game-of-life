@@ -15,7 +15,7 @@ export const Controls = ({
   onStartStop,
   onRandom,
   onClear,
-  onSpeedChange
+  onSpeedChange,
 }: ControlsProps) => {
   return (
     <div className="controls">
@@ -24,12 +24,12 @@ export const Controls = ({
       </button>
       <button onClick={onRandom}>Randomize Chaos</button>
       <button onClick={onClear}>Clear the Void</button>
-      
+
       <div className="speed-control">
         <label htmlFor="speed-select">Speed:</label>
-        <select 
+        <select
           id="speed-select"
-          value={speed} 
+          value={speed}
           onChange={(e) => onSpeedChange(Number(e.target.value))}
         >
           <option value={500}>Sluggish (500ms)</option>

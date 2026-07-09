@@ -30,7 +30,9 @@
   cursor: pointer;
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
 }
 
 .speed-control select:hover {

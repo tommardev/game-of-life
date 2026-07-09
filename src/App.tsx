@@ -18,7 +18,7 @@ function App() {
     toggleCell,
     handleStartStop,
     handleClear,
-    handleRandom
+    handleRandom,
   } = useGameOfLife();
 
   return (
@@ -26,7 +26,7 @@ function App() {
       <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-content">
           <Header generation={generation} />
-          <Controls 
+          <Controls
             running={running}
             speed={speed}
             onStartStop={handleStartStop}
@@ -39,7 +39,7 @@ function App() {
       </div>
 
       <div className="main-content">
-        <button 
+        <button
           className="sidebar-toggle"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >

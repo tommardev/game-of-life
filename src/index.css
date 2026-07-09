@@ -13,7 +13,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body, #root {
+body,
+#root {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -39,7 +40,9 @@ button {
   font-family: inherit;
   background-color: #222;
   cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s;
   color: #fff;
   margin: 0;
   width: 100%;

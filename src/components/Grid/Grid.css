@@ -5,7 +5,7 @@
   border: 2px solid #333;
   border-radius: 4px;
   padding: 1px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: calc((100vh - 4rem) * 2); /* 2:1 aspect ratio constraint */
   max-height: calc(100vh - 4rem);

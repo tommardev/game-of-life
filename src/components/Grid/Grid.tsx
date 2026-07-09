@@ -10,22 +10,22 @@ interface GridProps {
 
 export const Grid = ({ grid, onToggleCell }: GridProps) => {
   return (
-    <div 
+    <div
       className="grid-container"
       style={{
-        gridTemplateColumns: `repeat(${NUM_COLS}, 1fr)`
+        gridTemplateColumns: `repeat(${NUM_COLS}, 1fr)`,
       }}
     >
       {grid.map((row, i) =>
         row.map((cell, k) => (
-          <Cell 
-            key={`${i}-${k}`} 
-            cell={cell} 
+          <Cell
+            key={`${i}-${k}`}
+            cell={cell}
             rowIndex={i}
             colIndex={k}
-            onToggleCell={onToggleCell} 
+            onToggleCell={onToggleCell}
           />
-        ))
+        )),
       )}
     </div>
   );
