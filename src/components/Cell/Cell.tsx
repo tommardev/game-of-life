@@ -5,28 +5,26 @@ import './Cell.css';
 
 interface CellProps {
   cell: CellState;
-  rowIndex: number;
-  colIndex: number;
-  onToggleCell: (i: number, k: number) => void;
+  onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export const Cell = memo(
-  ({ cell, rowIndex, colIndex, onToggleCell }: CellProps) => {
-    const tooltip = getTooltipText(cell);
+export const Cell = memo(({ cell, onMouseDown, onMouseEnter }: CellProps) => {
+  const tooltip = getTooltipText(cell);
 
-    return (
-      <div
-        onClick={() => onToggleCell(rowIndex, colIndex)}
-        className="cell"
-        style={{
-          backgroundColor: getCellColor(cell.alive, cell.age),
-        }}
-      >
-        <div className="tooltip">
-          <div className="tooltip-title">{tooltip.title}</div>
-          <div className="tooltip-reason">{tooltip.reason}</div>
-        </div>
+  return (
+    <div
+      onMouseDown={onMouseDown}
+      onMouseEnter={onMouseEnter}
+      className="cell"
+      style={{
+        backgroundColor: getCellColor(cell.alive, cell.age),
+      }}
+    >
+      <div className="tooltip">
+        <div className="tooltip-title">{tooltip.title}</div>
+        <div className="tooltip-reason">{tooltip.reason}</div>
       </div>
-    );
-  },
-);
+    </div>
+  );
+});

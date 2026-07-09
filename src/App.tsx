@@ -15,7 +15,7 @@ function App() {
     populationHistory,
     speed,
     setSpeed,
-    toggleCell,
+    setCellsState,
     handleStartStop,
     handleClear,
     handleRandom,
@@ -45,7 +45,7 @@ function App() {
       </div>
 
       <div className="main-content">
-        <Grid grid={grid} onToggleCell={toggleCell} />
+        <Grid grid={grid} onSetCellsState={setCellsState} />
       </div>
     </div>
   );

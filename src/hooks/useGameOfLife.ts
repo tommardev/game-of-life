@@ -84,34 +84,48 @@ export const useGameOfLife = () => {
     }
   }, [running, runSimulation]);
 
-  const toggleCell = useCallback((i: number, k: number) => {
-    setGrid((g) => {
-      const newGrid = g.map((row) => [...row]);
-      const wasAlive = newGrid[i][k].alive;
-      newGrid[i][k] = {
-        ...newGrid[i][k],
-        alive: !wasAlive,
-        age: !wasAlive ? 1 : 0,
-      };
+  const setCellsState = useCallback(
+    (changes: { i: number; k: number; alive: boolean }[]) => {
+      if (changes.length === 0) return;
 
-      // Update neighbors for this cell
-      newGrid[i][k].neighbors = countNeighbors(newGrid, i, k);
+      setGrid((g) => {
+        const newGrid = g.map((row) => [...row]);
 
-      // Update neighbors for 8 adjacent cells
-      operations.forEach(([x, y]) => {
-        const newI = i + x;
-        const newK = k + y;
-        if (newI >= 0 && newI < NUM_ROWS && newK >= 0 && newK < NUM_COLS) {
-          newGrid[newI][newK] = {
-            ...newGrid[newI][newK],
-            neighbors: countNeighbors(newGrid, newI, newK),
+        changes.forEach(({ i, k, alive }) => {
+          newGrid[i][k] = {
+            ...newGrid[i][k],
+            alive: alive,
+            age: alive ? 1 : 0,
           };
-        }
-      });
+        });
 
-      return newGrid;
-    });
-  }, []);
+        // Collect all affected cells (the changed ones + their 8 neighbors)
+        const affectedCells = new Set<string>();
+        changes.forEach(({ i, k }) => {
+          affectedCells.add(`${i},${k}`);
+          operations.forEach(([x, y]) => {
+            const newI = i + x;
+            const newK = k + y;
+            if (newI >= 0 && newI < NUM_ROWS && newK >= 0 && newK < NUM_COLS) {
+              affectedCells.add(`${newI},${newK}`);
+            }
+          });
+        });
+
+        // Recalculate countNeighbors only for the unique affected cells
+        affectedCells.forEach((key) => {
+          const [i, k] = key.split(',').map(Number);
+          newGrid[i][k] = {
+            ...newGrid[i][k],
+            neighbors: countNeighbors(newGrid, i, k),
+          };
+        });
+
+        return newGrid;
+      });
+    },
+    [],
+  );
 
   const handleStartStop = () => {
     setRunning(!running);
@@ -137,7 +151,7 @@ export const useGameOfLife = () => {
     populationHistory,
     speed,
     setSpeed,
-    toggleCell,
+    setCellsState,
     handleStartStop,
     handleClear,
     handleRandom,
