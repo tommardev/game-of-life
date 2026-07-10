@@ -31,43 +31,89 @@
   text-align: center;
 }
 
+.embedded-content {
+  background: rgba(18, 18, 18, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.embedded-stats-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.embedded-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.embedded-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #9ca3af;
+  margin-bottom: 0.15rem;
+}
+
+.embedded-val {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f3f4f6;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Theme Glows */
-.modal-content.theme-fleeting {
+.modal-content.theme-fleeting, .embedded-content.theme-fleeting {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(148, 163, 184, 0.15);
   border-color: rgba(148, 163, 184, 0.3);
 }
 
-.modal-content.theme-extinction {
+.modal-content.theme-extinction, .embedded-content.theme-extinction {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(239, 68, 68, 0.18);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-.modal-content.theme-stability {
+.modal-content.theme-stability, .embedded-content.theme-stability {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(34, 197, 148, 0.18);
   border-color: rgba(34, 197, 94, 0.3);
 }
 
-.modal-content.theme-expansion {
+.modal-content.theme-expansion, .embedded-content.theme-expansion {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(6, 182, 212, 0.18);
   border-color: rgba(6, 182, 212, 0.3);
 }
 
-.modal-content.theme-decadence {
+.modal-content.theme-decadence, .embedded-content.theme-decadence {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(249, 115, 22, 0.18);
   border-color: rgba(249, 115, 22, 0.3);
 }
 
-.modal-content.theme-cosmos {
+.modal-content.theme-cosmos, .embedded-content.theme-cosmos {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
     0 0 25px rgba(168, 85, 247, 0.18);

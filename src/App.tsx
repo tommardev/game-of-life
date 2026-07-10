@@ -21,6 +21,7 @@ function App() {
     handleClear,
     handleRandom,
     lastRunStats,
+    currentStats,
     showInfoPanel,
     setShowInfoPanel,
   } = useGameOfLife();
@@ -49,13 +50,21 @@ function App() {
       </div>
 
       <div className="main-content">
-        <Grid grid={grid} onSetCellsState={setCellsState} />
+        <div className="main-content-inner">
+          <InfoPanel 
+            isOpen={!!currentStats} 
+            stats={currentStats} 
+            variant="embedded" 
+          />
+          <Grid grid={grid} onSetCellsState={setCellsState} />
+        </div>
       </div>
 
       <InfoPanel
         isOpen={showInfoPanel}
         stats={lastRunStats}
         onClose={() => setShowInfoPanel(false)}
+        variant="modal"
       />
     </div>
   );

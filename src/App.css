@@ -78,6 +78,14 @@
   position: relative;
 }
 
+.main-content-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 .sidebar-toggle {
   position: absolute;
   top: var(--toggle-top);

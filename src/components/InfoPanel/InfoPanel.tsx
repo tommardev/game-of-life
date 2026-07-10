@@ -5,13 +5,16 @@ import './InfoPanel.css';
 interface InfoPanelProps {
   isOpen: boolean;
   stats: RunStats | null;
-  onClose: () => void;
+  onClose?: () => void;
+  variant?: 'modal' | 'embedded';
 }
 
-export const InfoPanel = ({ isOpen, stats, onClose }: InfoPanelProps) => {
+export const InfoPanel = ({ isOpen, stats, onClose, variant = 'modal' }: InfoPanelProps) => {
   useEffect(() => {
+    if (variant !== 'modal') return;
+    
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && onClose) {
         onClose();
       }
     };
@@ -21,7 +24,7 @@ export const InfoPanel = ({ isOpen, stats, onClose }: InfoPanelProps) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, variant]);
 
   if (!isOpen || !stats) return null;
 
@@ -119,57 +122,96 @@ export const InfoPanel = ({ isOpen, stats, onClose }: InfoPanelProps) => {
         ? 'text-negative'
         : 'text-neutral';
 
+  const content = (
+    <>
+      <div className="modal-badge-container">
+        <span
+          className="modal-badge"
+          style={{
+            borderColor: analysis.accentColor,
+            color: analysis.accentColor,
+          }}
+        >
+          {analysis.badge}
+        </span>
+      </div>
+      <h2 className="modal-title">{analysis.title}</h2>
+      {variant === 'modal' && <p className="modal-story">{analysis.story}</p>}
+
+      <div className="modal-divider"></div>
+
+      <h3 className="section-title">Simulation Statistics</h3>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <span className="card-label">Generations</span>
+          <span className="card-val">{generationsElapsed}</span>
+        </div>
+        <div className="stat-card">
+          <span className="card-label">Peak Population</span>
+          <span className="card-val">{peakPopulation}</span>
+        </div>
+        <div className="stat-card">
+          <span className="card-label">Net Change</span>
+          <span className={`card-val ${netChangeClass}`}>
+            {netChangeText}
+          </span>
+        </div>
+        <div className="stat-card">
+          <span className="card-label">Starting Pop</span>
+          <span className="card-val">{startPopulation}</span>
+        </div>
+        <div className="stat-card">
+          <span className="card-label">Ending Pop</span>
+          <span className="card-val">{endPopulation}</span>
+        </div>
+      </div>
+
+      {variant === 'modal' && (
+        <button className="modal-close-btn" onClick={onClose}>
+          Acknowledge & Continue
+        </button>
+      )}
+    </>
+  );
+
+  if (variant === 'embedded') {
+    return (
+      <div className={`embedded-content ${analysis.themeClass}`}>
+        <div className="embedded-stats-row">
+          <div className="embedded-stat">
+            <span className="embedded-label">Generations</span>
+            <span className="embedded-val">{generationsElapsed}</span>
+          </div>
+          <div className="embedded-stat">
+            <span className="embedded-label">Peak Pop</span>
+            <span className="embedded-val">{peakPopulation}</span>
+          </div>
+          <div className="embedded-stat">
+            <span className="embedded-label">Net Change</span>
+            <span className={`embedded-val ${netChangeClass}`}>
+              {netChangeText}
+            </span>
+          </div>
+          <div className="embedded-stat">
+            <span className="embedded-label">Start Pop</span>
+            <span className="embedded-val">{startPopulation}</span>
+          </div>
+          <div className="embedded-stat">
+            <span className="embedded-label">Current Pop</span>
+            <span className="embedded-val">{endPopulation}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
         className={`modal-content ${analysis.themeClass}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-badge-container">
-          <span
-            className="modal-badge"
-            style={{
-              borderColor: analysis.accentColor,
-              color: analysis.accentColor,
-            }}
-          >
-            {analysis.badge}
-          </span>
-        </div>
-        <h2 className="modal-title">{analysis.title}</h2>
-        <p className="modal-story">{analysis.story}</p>
-
-        <div className="modal-divider"></div>
-
-        <h3 className="section-title">Simulation Statistics</h3>
-        <div className="stats-grid">
-          <div className="stat-card">
-            <span className="card-label">Generations</span>
-            <span className="card-val">{generationsElapsed}</span>
-          </div>
-          <div className="stat-card">
-            <span className="card-label">Peak Population</span>
-            <span className="card-val">{peakPopulation}</span>
-          </div>
-          <div className="stat-card">
-            <span className="card-label">Net Change</span>
-            <span className={`card-val ${netChangeClass}`}>
-              {netChangeText}
-            </span>
-          </div>
-          <div className="stat-card">
-            <span className="card-label">Starting Pop</span>
-            <span className="card-val">{startPopulation}</span>
-          </div>
-          <div className="stat-card">
-            <span className="card-label">Ending Pop</span>
-            <span className="card-val">{endPopulation}</span>
-          </div>
-        </div>
-
-        <button className="modal-close-btn" onClick={onClose}>
-          Acknowledge & Continue
-        </button>
+        {content}
       </div>
     </div>
   );

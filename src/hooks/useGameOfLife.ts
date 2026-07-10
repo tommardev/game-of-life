@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import type { CellState, RunStats } from '../types';
 import { NUM_ROWS, NUM_COLS, operations } from '../constants';
 import {
@@ -198,6 +198,28 @@ export const useGameOfLife = () => {
     runStatsRef.current = null;
   }, []);
 
+  const currentStats = useMemo(() => {
+    const currentPop = countAliveCells(grid);
+    if (!runStatsRef.current) {
+      return {
+        generationsElapsed: 0,
+        startPopulation: currentPop,
+        endPopulation: currentPop,
+        peakPopulation: currentPop,
+        populationHistory: [currentPop],
+      };
+    }
+    const elapsed = generation - runStatsRef.current.startGeneration;
+    
+    return {
+      generationsElapsed: elapsed,
+      startPopulation: runStatsRef.current.startPopulation,
+      endPopulation: currentPop,
+      peakPopulation: Math.max(runStatsRef.current.peakPopulation, currentPop),
+      populationHistory: [...runStatsRef.current.history, currentPop],
+    };
+  }, [grid, generation]);
+
   return {
     grid,
     running,
@@ -210,6 +232,7 @@ export const useGameOfLife = () => {
     handleClear,
     handleRandom,
     lastRunStats,
+    currentStats,
     showInfoPanel,
     setShowInfoPanel,
   };
