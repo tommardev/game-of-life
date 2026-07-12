@@ -19,17 +19,23 @@ export const Grid = ({ grid, onSetCellsState }: GridProps) => {
   >(new Map());
 
   useEffect(() => {
-    const handleMouseUp = () => {
+    const handleUp = () => {
       if (isMouseDownRef.current) {
         isMouseDownRef.current = false;
         const changes = Array.from(changesRef.current.values());
-        onSetCellsState(changes);
-        changesRef.current.clear();
+        if (changes.length > 0) {
+          onSetCellsState(changes);
+          changesRef.current.clear();
+        }
       }
     };
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseup', handleUp);
+    window.addEventListener('touchend', handleUp);
+    window.addEventListener('touchcancel', handleUp);
     return () => {
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', handleUp);
+      window.removeEventListener('touchend', handleUp);
+      window.removeEventListener('touchcancel', handleUp);
     };
   }, [onSetCellsState]);
 
@@ -78,9 +84,59 @@ export const Grid = ({ grid, onSetCellsState }: GridProps) => {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null;
+    if (element && element.dataset.row && element.dataset.col) {
+      isMouseDownRef.current = true;
+      const rowIndex = parseInt(element.dataset.row, 10);
+      const colIndex = parseInt(element.dataset.col, 10);
+      const cellAlive = grid[rowIndex][colIndex].alive;
+      const targetState = !cellAlive;
+      isDrawingAliveRef.current = targetState;
+
+      changesRef.current.clear();
+      changesRef.current.set(`${rowIndex}-${colIndex}`, {
+        i: rowIndex,
+        k: colIndex,
+        alive: targetState,
+      });
+
+      element.style.backgroundColor = targetState
+        ? 'hsl(48, 100%, 50%)'
+        : '#1a1a1a';
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isMouseDownRef.current) return;
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null;
+    if (element && element.dataset.row && element.dataset.col) {
+      const rowIndex = parseInt(element.dataset.row, 10);
+      const colIndex = parseInt(element.dataset.col, 10);
+      const key = `${rowIndex}-${colIndex}`;
+      
+      if (!changesRef.current.has(key)) {
+        const targetState = isDrawingAliveRef.current;
+        changesRef.current.set(key, {
+          i: rowIndex,
+          k: colIndex,
+          alive: targetState,
+        });
+
+        element.style.backgroundColor = targetState
+          ? 'hsl(48, 100%, 50%)'
+          : '#1a1a1a';
+      }
+    }
+  };
+
   return (
     <div
       className="grid-container"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       style={{
         gridTemplateColumns: `repeat(${NUM_COLS}, 1fr)`,
       }}
@@ -90,6 +146,8 @@ export const Grid = ({ grid, onSetCellsState }: GridProps) => {
           <Cell
             key={`${i}-${k}`}
             cell={cell}
+            rowIndex={i}
+            colIndex={k}
             onMouseDown={(e) => handleMouseDown(e, i, k, cell.alive)}
             onMouseEnter={(e) => handleMouseEnter(e, i, k)}
           />

@@ -5,6 +5,7 @@ import { Controls } from './components/Controls/Controls';
 import { Grid } from './components/Grid/Grid';
 import { Chart } from './components/Chart/Chart';
 import { InfoPanel } from './components/InfoPanel/InfoPanel';
+import { MobileControls } from './components/MobileControls/MobileControls';
 import './App.css';
 
 function App() {
@@ -48,6 +49,9 @@ function App() {
           <Chart populationHistory={populationHistory} />
         </div>
       </div>
+      {isSidebarOpen && (
+        <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
+      )}
 
       <div className="main-content">
         <div className="main-content-inner">
@@ -59,6 +63,13 @@ function App() {
           <Grid grid={grid} onSetCellsState={setCellsState} />
         </div>
       </div>
+
+      <MobileControls
+        running={running}
+        onStartStop={handleStartStop}
+        onClear={handleClear}
+        onRandom={handleRandom}
+      />
 
       <InfoPanel
         isOpen={showInfoPanel}

@@ -10,4 +10,5 @@
   max-width: calc((100vh - 4rem) * 2); /* 2:1 aspect ratio constraint */
   max-height: calc(100vh - 4rem);
   aspect-ratio: 2 / 1;
+  touch-action: none;
 }

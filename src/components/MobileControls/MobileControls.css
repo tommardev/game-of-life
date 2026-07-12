@@ -1,0 +1,49 @@
+.mobile-controls {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 18, 18, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 500;
+  }
+
+  .mc-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+
+  .mc-btn:active {
+    transform: scale(0.9);
+  }
+
+  .mc-play-btn {
+    background: rgba(255, 255, 255, 0.1);
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.75rem;
+  }
+}

@@ -5,11 +5,13 @@ import './Cell.css';
 
 interface CellProps {
   cell: CellState;
+  rowIndex: number;
+  colIndex: number;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
   onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export const Cell = memo(({ cell, onMouseDown, onMouseEnter }: CellProps) => {
+export const Cell = memo(({ cell, rowIndex, colIndex, onMouseDown, onMouseEnter }: CellProps) => {
   const tooltip = getTooltipText(cell);
 
   return (
@@ -17,6 +19,8 @@ export const Cell = memo(({ cell, onMouseDown, onMouseEnter }: CellProps) => {
       onMouseDown={onMouseDown}
       onMouseEnter={onMouseEnter}
       className="cell"
+      data-row={rowIndex}
+      data-col={colIndex}
       style={{
         backgroundColor: getCellColor(cell.alive, cell.age),
       }}
